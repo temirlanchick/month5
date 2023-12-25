@@ -6,7 +6,7 @@ from rest_framework import status
 @api_view(['GET'])
 def director_list_api_view(request):
     dict_ = {
-        "text": 'Christopher Nolan',
+        "text": 'Christopher Nolan, ...',
         "int": 100,
         "float": 3.14,
         "bool": True,
@@ -19,7 +19,7 @@ def director_list_api_view(request):
 @api_view(['GET'])
 def movie_list_api_view(request):
     dict_ = {
-        "text": 'Interstellar',
+        "text": 'Interstellar, Batman, ...',
         "int": 100,
         "float": 3.14,
         "bool": True,
