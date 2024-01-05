@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import Director, Movie, Review
+from rest_framework.exceptions import ValidationError
 
 
 class DirectorSerializer(serializers.ModelSerializer):
@@ -17,4 +18,19 @@ class MovieSerializer(serializers.ModelSerializer):
 class ReviewsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review
-        fields = '__all__'
+        fields = 'id text rating created_at'.split()
+
+
+class DirectorValidateSerializer(serializers.Serializer):
+    name = serializers.CharField(required=True, max_length=255, min_length=3)
+    description = serializers.CharField(required=False)
+
+
+class MovieValidateSerializer(serializers.Serializer):
+    name = serializers.CharField(required=True, max_length=255, min_length=3)
+    description = serializers.CharField(required=False)
+
+
+class ReviewValidateSerializer(serializers.Serializer):
+    name = serializers.CharField(required=True, max_length=255, min_length=3)
+    description = serializers.CharField(required=False)
