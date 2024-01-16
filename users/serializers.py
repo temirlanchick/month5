@@ -22,3 +22,5 @@ class RegisterValidateSerializer(UserValidateSerializer):
         except User.DoesNotExist:
             return username
         raise ValidationError('User already exists!')
+
+

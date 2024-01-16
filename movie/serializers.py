@@ -1,6 +1,6 @@
 from rest_framework import serializers
+
 from .models import Director, Movie, Review
-from rest_framework.exceptions import ValidationError
 
 
 class DirectorSerializer(serializers.ModelSerializer):

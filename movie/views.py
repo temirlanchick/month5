@@ -1,9 +1,49 @@
+from collections import OrderedDict
 from rest_framework.decorators import api_view
+from rest_framework.generics import ListCreateAPIView
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework import status
 from .serializers import DirectorSerializer, MovieSerializer, ReviewsSerializer, DirectorValidateSerializer, \
     MovieValidateSerializer, ReviewValidateSerializer
 from .models import Director, Movie, Review
+
+
+class DirectorListCreateAPIView(ListCreateAPIView):
+    queryset = Director.objects.all()
+    serializer_class = DirectorSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = DirectorValidateSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(status=status.HTTP_400_BAD_REQUEST,
+                            data={'errors': serializer.errors})
+
+        name = serializer.validated_data.get('name')
+        description = serializer.validated_data.get('description')
+
+        director = Director.objects.create(name=name, description=description)
+        director.save()
+
+        return Response(data={'id': director.id}, status=status.HTTP_201_CREATED)
+
+
+class CustomPagination(PageNumberPagination):
+    page_size = 10
+
+    def get_paginated_response(self, data):
+        return Response(OrderedDict([
+            ('total', self.page.paginator.count),
+            ('next', self.get_next_link()),
+            ('previous', self.get_previous_link()),
+            ('data', data)
+        ]))
+
+
+class MovieListAPIView(ListCreateAPIView):
+    queryset = Movie.objects.all()
+    serializer_class = MovieSerializer
+    pagination_class = CustomPagination
 
 
 @api_view(['GET', 'POST', 'DELETE'])
@@ -24,14 +64,6 @@ def director_list_api_view(request, id):
         if not serializer.is_valid():
             return Response(status=status.HTTP_400_BAD_REQUEST,
                             data={'errors': serializer.errors})
-
-        name = serializer.validated_data.get('name')
-        description = serializer.validated_data.get('description')
-
-        director = Director.objects.create(name=name, description=description)
-        director.save()
-
-        return Response(data={'id': director.id}, status=status.HTTP_201_CREATED)
 
 
 @api_view(['GET'])
