@@ -39,7 +39,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'movie',
     'rest_framework',
-    'products',
     'query_counter',
     'rest_framework.authtoken'
 ]
@@ -90,8 +89,12 @@ WSGI_APPLICATION = 'afi.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'movie_db',
+        'USER': 'movie_user',
+        'PASSWORD': '123',
+        'HOST': 'localhost',
+        'PORT': '5432'
     }
 }
 
